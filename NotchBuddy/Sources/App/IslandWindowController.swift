@@ -543,8 +543,9 @@ final class IslandWindowController: NSWindowController {
             NotificationCenter.default.post(name: .triggerEmote, object: BotEmote.annoyed)
             return
         }
-        let activated = TerminalApps.activate(preferred: state.sessionTerminalBundleId)
-        if !activated {
+        let terminal = state.sessionTerminalBundleId
+        if !TerminalApps.activate(preferred: terminal, project: state.sessionProjectName),
+           !TerminalApps.launch(bundleId: terminal) {
             NSWorkspace.shared.open(
                 URL(fileURLWithPath: "/System/Applications/Utilities/Terminal.app"))
         }

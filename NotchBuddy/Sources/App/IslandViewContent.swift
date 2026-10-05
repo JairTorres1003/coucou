@@ -182,7 +182,12 @@ struct OverviewView: View {
         switch task.id {
         case "integration_claude":
             #if !APPSTORE
-            if let terminal = state.sessionTerminalBundleId, TerminalApps.activate(preferred: terminal) { return }
+            if let terminal = state.sessionTerminalBundleId {
+                if !TerminalApps.activate(preferred: terminal, project: state.sessionProjectName) {
+                    TerminalApps.launch(bundleId: terminal)
+                }
+                return
+            }
             #endif
             let vscodeBundleId = "com.microsoft.VSCode"
             if let app = NSWorkspace.shared.runningApplications.first(where: { $0.bundleIdentifier == vscodeBundleId }) {

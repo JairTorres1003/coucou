@@ -382,7 +382,10 @@ final class HookServer: @unchecked Sendable {
         }
 
         #if !APPSTORE
-        if agentId == "integration_claude" { state.sessionTerminalBundleId = isWarp ? bundleId : nil }
+        if agentId == "integration_claude" {
+            state.sessionTerminalBundleId = isWarp ? bundleId : nil
+            state.sessionProjectName = isWarp ? rawName : nil
+        }
         #endif
 
         let focused = state.focusId == agentId

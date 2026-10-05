@@ -240,6 +240,8 @@ final class AppState: ObservableObject {
 
     // Bundle id of the terminal (Warp) the last Claude Code event came from; nil for VS Code.
     var sessionTerminalBundleId: String?
+    // Folder name of that session, to raise its window.
+    var sessionProjectName: String?
 
     // Absence interval — persisted
     var absenceInterval: TimeInterval = 3 * 60 {
