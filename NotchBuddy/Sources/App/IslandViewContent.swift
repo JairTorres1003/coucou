@@ -181,6 +181,9 @@ struct OverviewView: View {
         guard let task else { return }
         switch task.id {
         case "integration_claude":
+            #if !APPSTORE
+            if let terminal = state.sessionTerminalBundleId, TerminalApps.activate(preferred: terminal) { return }
+            #endif
             let vscodeBundleId = "com.microsoft.VSCode"
             if let app = NSWorkspace.shared.runningApplications.first(where: { $0.bundleIdentifier == vscodeBundleId }) {
                 app.activate(options: .activateIgnoringOtherApps)
@@ -219,13 +222,7 @@ struct OverviewView: View {
             #endif
         case "agent_gemini", "agent_antigravity":
             #if !APPSTORE
-            let terminalBundleIds = ["com.apple.Terminal", "com.googlecode.iterm2",
-                                     "net.kovidgoyal.kitty", "com.mitchellh.ghostty"]
-            if let hit = terminalBundleIds.compactMap({ id in
-                NSWorkspace.shared.runningApplications.first { $0.bundleIdentifier == id }
-            }).first {
-                hit.activate(options: .activateIgnoringOtherApps)
-            }
+            TerminalApps.activate(preferred: nil)
             #endif
         case "ai_anthropic":
             switchChatProvider(.anthropic)
@@ -249,13 +246,7 @@ struct OverviewView: View {
                 }
             } else {
                 #if !APPSTORE
-                let terminalBundleIds = ["com.apple.Terminal", "com.googlecode.iterm2",
-                                         "net.kovidgoyal.kitty", "com.mitchellh.ghostty"]
-                if let hit = terminalBundleIds.compactMap({ id in
-                    NSWorkspace.shared.runningApplications.first { $0.bundleIdentifier == id }
-                }).first {
-                    hit.activate(options: .activateIgnoringOtherApps)
-                }
+                TerminalApps.activate(preferred: nil)
                 #endif
             }
         }

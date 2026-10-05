@@ -345,6 +345,12 @@ final class HookServer: @unchecked Sendable {
         let isVSCodeEditor = !isCursorEditor && (
             termProgram.lowercased().contains("vscode") ||
             bundleId.lowercased().contains("vscode"))
+        // Warp (GitHub build): Claude Code in a Warp tab follows the same path as VS Code.
+        #if !APPSTORE
+        let isWarp = TerminalApps.isWarp(termProgram: termProgram, bundleId: bundleId)
+        #else
+        let isWarp = false
+        #endif
 
         // Routing:
         // • "codex" → agent_codex (GitHub build only: workspace pill, approvals in the notch)
@@ -367,13 +373,17 @@ final class HookServer: @unchecked Sendable {
         } else if isCursorEditor {
             agentId = "agent_cursor"
             isExternalAgent = false
-        } else if isVSCodeEditor {
+        } else if isVSCodeEditor || isWarp {
             agentId = "integration_claude"
             isExternalAgent = false
         } else {
             nbLog("Ignored \(name) from \(termProgram.isEmpty ? bundleId : termProgram) (\(projectName))")
             return
         }
+
+        #if !APPSTORE
+        if agentId == "integration_claude" { state.sessionTerminalBundleId = isWarp ? bundleId : nil }
+        #endif
 
         let focused = state.focusId == agentId
 
@@ -622,6 +632,12 @@ final class HookServer: @unchecked Sendable {
         let isVSCodeEditor = !isCursorEditor && (
             termProgram.lowercased().contains("vscode") ||
             bundleId.lowercased().contains("vscode"))
+        // Warp (GitHub build): Claude Code in a Warp tab follows the same path as VS Code.
+        #if !APPSTORE
+        let isWarp = TerminalApps.isWarp(termProgram: termProgram, bundleId: bundleId)
+        #else
+        let isWarp = false
+        #endif
 
         // Codex gets the same approval card as Claude Code / Cursor (GitHub build only).
         // Other external agents (any other coucou_agent) answer immediately with "ask"
@@ -648,7 +664,7 @@ final class HookServer: @unchecked Sendable {
         } else {
             pillId = "integration_claude"
         }
-        guard isCodexRequest || isCursorEditor || isVSCodeEditor else {
+        guard isCodexRequest || isCursorEditor || isVSCodeEditor || isWarp else {
             Task.detached { [weak self] in
                 self?.sendLine(fd: fd, text: #"{"permissionDecision":"ask"}"#)
                 close(fd)
@@ -798,6 +814,12 @@ final class HookServer: @unchecked Sendable {
         let isVSCodeEditor = !isCursorEditor && (
             termProgram.lowercased().contains("vscode") ||
             bundleId.lowercased().contains("vscode"))
+        // Warp (GitHub build): Claude Code in a Warp tab follows the same path as VS Code.
+        #if !APPSTORE
+        let isWarp = TerminalApps.isWarp(termProgram: termProgram, bundleId: bundleId)
+        #else
+        let isWarp = false
+        #endif
         #if !APPSTORE
         let isCodexRequest = rawAgent == "codex"
         #else
@@ -811,7 +833,7 @@ final class HookServer: @unchecked Sendable {
         } else {
             pillId = "integration_claude"
         }
-        guard isCodexRequest || isCursorEditor || isVSCodeEditor else {
+        guard isCodexRequest || isCursorEditor || isVSCodeEditor || isWarp else {
             Task.detached { [weak self] in
                 self?.sendLine(fd: fd, text: #"{"permissionDecision":"ask"}"#)
                 close(fd)

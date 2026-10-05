@@ -238,6 +238,9 @@ final class AppState: ObservableObject {
         didSet { UserDefaults.standard.set(showAlwaysButton, forKey: "showAlwaysButton") }
     }
 
+    // Bundle id of the terminal (Warp) the last Claude Code event came from; nil for VS Code.
+    var sessionTerminalBundleId: String?
+
     // Absence interval — persisted
     var absenceInterval: TimeInterval = 3 * 60 {
         didSet { UserDefaults.standard.set(absenceInterval, forKey: "absenceInterval") }
