@@ -19,12 +19,22 @@ jobs:
       - name: Generate project
         run: cd NotchBuddy && xcodegen
 
-      - name: Build Release (no signing)
+      - name: Build Release (no signing, without the iPhone link)
         run: |
           xcodebuild \
             -project NotchBuddy/NotchBuddy.xcodeproj \
             -scheme NotchBuddy \
             -configuration Release \
+            build \
+            CODE_SIGNING_ALLOWED=NO \
+            CODE_SIGNING_REQUIRED=NO
+
+      - name: Build ReleaseCloud (no signing, with the iPhone link)
+        run: |
+          xcodebuild \
+            -project NotchBuddy/NotchBuddy.xcodeproj \
+            -scheme NotchBuddy \
+            -configuration ReleaseCloud \
             build \
             CODE_SIGNING_ALLOWED=NO \
             CODE_SIGNING_REQUIRED=NO

@@ -9,7 +9,7 @@
 #
 #   ./scripts/cloud-test-build.sh
 #
-# The normal release (scripts/release.sh, Release configuration) is unchanged.
+# The normal release (scripts/release.sh) builds this same ReleaseCloud configuration.
 set -euo pipefail
 
 REPO_ROOT="$(cd "$(dirname "$0")/.." && pwd)"

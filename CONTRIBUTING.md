@@ -11,6 +11,15 @@ cd NotchBuddy && xcodegen && open NotchBuddy.xcodeproj
 
 Never edit `NotchBuddy.xcodeproj` by hand: change `project.yml` and run `xcodegen`.
 
+To build an optimized app for your own Mac, signed ad hoc (no Apple Developer account needed):
+
+```bash
+./scripts/local-build.sh            # without the iPhone link
+./scripts/local-build.sh --iphone   # with the iPhone link (PHONE_LINK, ReleaseCloud)
+```
+
+The `Release` configuration has no iPhone link: `Sources/App/PhoneLink` is not compiled and the app has no iCloud entitlements. `ReleaseCloud` adds them and is what `scripts/release.sh` ships.
+
 Check resting island dimensions on screens with and without a notch:
 
 ```bash

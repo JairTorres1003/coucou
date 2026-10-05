@@ -83,7 +83,7 @@ if [ "$MODE" != "--finish" ]; then
   rm -f "$TMP_PLIST"
   echo "Profile: $PROFILE_FOUND (expires $EXPIRY)"
 
-  # ── 2. xcodegen + Release build ─────────────────────────────────────────────
+  # ── 2. xcodegen + ReleaseCloud build (Release + the iPhone link) ────────────
   cd "$REPO_ROOT/NotchBuddy"
   PLIST_VERSION=$(/usr/libexec/PlistBuddy -c "Print :CFBundleShortVersionString" Resources/Info.plist 2>/dev/null || true)
   [ "$PLIST_VERSION" = "$VERSION" ] || die "NotchBuddy/Resources/Info.plist is version $PLIST_VERSION, not $VERSION: run xcodegen and commit Info.plist"
@@ -97,7 +97,7 @@ if [ "$MODE" != "--finish" ]; then
   xcodebuild \
     -project NotchBuddy.xcodeproj \
     -scheme NotchBuddy \
-    -configuration Release \
+    -configuration ReleaseCloud \
     build \
     CODE_SIGN_IDENTITY="$IDENTITY" \
     CODE_SIGNING_REQUIRED=YES \

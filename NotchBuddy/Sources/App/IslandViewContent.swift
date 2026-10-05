@@ -309,8 +309,9 @@ struct ApprovalView: View {
                     PrimaryButton("Allow") {
                         HookServer.shared.sendApprovalDecision("allow")
                     }
-                    // Codex rejects updatedPermissions, so "Always" is not offered
-                    if approval?.pillId != "agent_codex" {
+                    // Codex rejects updatedPermissions, so "Always" is not offered;
+                    // Settings → Behavior can hide it for every agent
+                    if approval?.pillId != "agent_codex" && state.showAlwaysButton {
                         SecondaryButton("Always") {
                             HookServer.shared.sendApprovalDecision("always")
                         }

@@ -258,6 +258,11 @@ struct SettingsView: View {
                         .frame(width: 48)
                     Text("min without movement")
                 }
+                Toggle("Show the \"Always\" button on permission requests", isOn: $state.showAlwaysButton)
+                Text("\"Always\" lets Claude Code save a permanent allow rule for that command. Turn it off to only offer Deny and Allow.")
+                    .font(.system(size: 11))
+                    .foregroundColor(.secondary)
+                    .fixedSize(horizontal: false, vertical: true)
             }
             .padding(6)
         }

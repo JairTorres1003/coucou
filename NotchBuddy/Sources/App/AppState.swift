@@ -232,6 +232,12 @@ final class AppState: ObservableObject {
         didSet { UserDefaults.standard.set(autoCloseInterval, forKey: "autoCloseInterval") }
     }
 
+    // "Always" button on permission cards — persisted. On by default (as shipped);
+    // turn it off to never offer a permanent allow rule from the notch.
+    @Published var showAlwaysButton: Bool = true {
+        didSet { UserDefaults.standard.set(showAlwaysButton, forKey: "showAlwaysButton") }
+    }
+
     // Absence interval — persisted
     var absenceInterval: TimeInterval = 3 * 60 {
         didSet { UserDefaults.standard.set(absenceInterval, forKey: "absenceInterval") }
@@ -419,6 +425,7 @@ final class AppState: ObservableObject {
         if let v = ud.object(forKey: "autoCloseInterval") as? Double {
             autoCloseInterval = (v == 60) ? 15 : v
         }
+        if let v = ud.object(forKey: "showAlwaysButton") as? Bool { showAlwaysButton = v }
         if let v = ud.object(forKey: "absenceInterval")   as? Double { absenceInterval   = v }
         if let v = ud.object(forKey: "greetThreshold")    as? Double { greetThresholdSeconds = v }
         if let v = ud.object(forKey: "hotkeyEnabled") as? Bool  { hotkeyEnabled = v }
